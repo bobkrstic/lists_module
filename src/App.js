@@ -1,26 +1,76 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
+import "./App.css";
+import Person from "./Person/Person";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+class App extends Component {
+  state = {
+    persons: [
+      { name: "Jack", age: 28 },
+      { name: "Bob", age: 25 },
+      { name: "Vika", age: 24 }
+    ]
+  };
+
+  switchNameHandler = newName => {
+    // console.log("Clicked");
+    // Dont do this: this.state.persons[0].name = "Jacko";
+    this.setState({
+      persons: [
+        { name: newName, age: 28 },
+        { name: "Bob", age: 25 },
+        { name: "Vika", age: 25 }
+      ]
+    });
+  };
+
+  nameChangedHandler = event => {
+    this.setState({
+      persons: [
+        { name: "Jack", age: 28 },
+        { name: event.target.value, age: 29 },
+        { name: "Vika", age: 26 }
+      ]
+    });
+  };
+
+  render() {
+    const style = {
+      backgroundColor: "white",
+      font: "inherit",
+      border: "1px solid blue",
+      padding: "8px",
+      cursor: "pointer"
+    };
+
+    return (
+      <div className="App">
+        <h1>Hello</h1>
+        <p>This is a paragraph</p>
+        <button
+          style={style}
+          onClick={() => this.switchNameHandler("Jackie Kennedy")}
         >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+          Switch name
+        </button>
+        <Person
+          name={this.state.persons[0].name}
+          age={this.state.persons[0].age}
+        />
+        <Person
+          name={this.state.persons[1].name}
+          age={this.state.persons[1].age}
+          click={this.switchNameHandler.bind(this, "Jack!")}
+          changed={this.nameChangedHandler}
+        >
+          My Hobbies: Racing
+        </Person>
+        <Person
+          name={this.state.persons[2].name}
+          age={this.state.persons[2].age}
+        />
+      </div>
+    );
+  }
 }
 
 export default App;
