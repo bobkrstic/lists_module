@@ -13,21 +13,30 @@ class App extends Component {
     showPersons: false
   };
 
-  nameChangedHandler = event => {
+  nameChangedHandler = (event, id) => {
+    const personAtIndex = this.state.persons.findIndex(p => {
+      return p.id === id;
+    });
+
+    const updatedPerson = { ...this.state.persons[personAtIndex] };
+
+    updatedPerson.name = event.target.value;
+
+    // making a copy of the state
+    const personsCopy = [...this.state.persons];
+    personsCopy[personAtIndex] = updatedPerson;
+
     this.setState({
-      persons: [
-        { name: "Jack", age: 28 },
-        { name: event.target.value, age: 29 },
-        { name: "Vika", age: 26 }
-      ]
+      persons: personsCopy
     });
   };
 
   deletePersonHandler = personIndex => {
     // const persons = this.state.persons.slice();
-    const persons = [...this.state.persons];
-    persons.splice(personIndex, 1);
-    this.setState({ persons: persons });
+    // making a copy of the state array
+    const personsNewCopy = [...this.state.persons];
+    personsNewCopy.splice(personIndex, 1);
+    this.setState({ persons: personsNewCopy });
   };
 
   togglePersonsHandler = () => {
@@ -47,6 +56,7 @@ class App extends Component {
     // by default 'persons' is null. If the statement is true, persons will hold the code below
     let persons = null;
 
+    // index is given by react
     if (this.state.showPersons) {
       persons = (
         <div>
@@ -57,6 +67,7 @@ class App extends Component {
                 name={person.name}
                 age={person.age}
                 key={person.id}
+                changed={event => this.nameChangedHandler(event, person.id)}
               />
             );
           })}
